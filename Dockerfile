@@ -1,0 +1,2 @@
+FROM python:3.10.1
+LABEL MAINTAINER=zhang19990906@gmail.com BUILDTYPE=Aliyun
