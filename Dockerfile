@@ -1,15 +1,19 @@
-FROM alpine:3.18
+FROM alpine:3.17
 
-# 使用阿里云 OpenResty 镜像源（无签名验证问题）
-RUN echo "https://mirrors.aliyun.com/openresty/alpine/v3.18/main" >> /etc/apk/repositories
+# 1. 添加 OpenResty 官方仓库（v3.17）
+RUN echo "https://openresty.org/package/alpine/v3.17/main" >> /etc/apk/repositories
 
-# 直接安装 openresty（无需 wget 或 pubkey）
+# 2. 下载并安装正确的 RSA 公钥（注意：是 .rsa.pub，不是 .gpg！）
+RUN wget -O /etc/apk/keys/openresty.org.rsa.pub \
+    https://openresty.org/package/almalinux-openresty.rsa.pub
+
+# 3. 安装 openresty 和其他工具
 RUN apk add --no-cache \
     openresty \
     python3 py3-pip \
     bash curl vim
 
-# 后续保持不变...
+# 软链接
 RUN ln -sf python3 /usr/bin/python && \
     ln -sf pip3 /usr/bin/pip
 
